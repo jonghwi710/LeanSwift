@@ -10,7 +10,7 @@ class MicroewaveMachine {
     
     var timer: Timer?
     var count: Int = 0
-    var limit: Int = 10
+    var limit: Int = 0
     
     func start() {
         timer = Timer.scheduledTimer(
@@ -23,26 +23,27 @@ class MicroewaveMachine {
     }
     
     @objc func countup() {
-        count += 1
-        print("\(count)")
-        if watt == 500 {
+        if watt > 0 && limit > 0{
+            count += 1
+            print("\(count)")
             if limit <= count {
                 print("完了しました。")
                 timer?.invalidate()
             }
-        }else if watt == 1000 {
-            var limit = limit / 2
-            if limit <= count {
-                print("完了しました。")
-                timer?.invalidate()
-            }
+        // 例外
+        }else if watt == 0 {// 電源が入ってない想定
+            print("電源が入っていません。")
+            timer?.invalidate()
+        }else if limit == 0 {// 時間を設定してない想定
+            print("時間を設定してください。")
+            timer?.invalidate()
         }
     }
     
 }
 
 let microewaveMachine = MicroewaveMachine()
-microewaveMachine.watt = 1000
+microewaveMachine.watt = 500
 microewaveMachine.start()
 
 
